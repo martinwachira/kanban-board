@@ -1,0 +1,9 @@
+.cont {
+  display: inline-block;
+  margin: 2.5rem;
+  /* width: 200;
+  margin: 10; */
+}
+.faction {
+  text-align: center;
+}

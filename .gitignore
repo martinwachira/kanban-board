@@ -21,3 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# extra
+Task 1.pdf
+/Task
+.pdf
