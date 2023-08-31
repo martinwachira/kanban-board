@@ -1,15 +1,15 @@
 import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
 
-import AddCard from "./AddCard";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import React from "react";
+import TaskCard from "./TaskCard";
 import classes from "./cardstyles.module.css";
 
-const ColumnCard = () => {
+const ColumnCard = ({ title, tasks }) => {
   return (
     <Card className={classes.cont}>
       <CardHeader
-        title="To-Do"
+        title={title}
         action={
           <IconButton>
             <MoreVertIcon />
@@ -17,11 +17,16 @@ const ColumnCard = () => {
         }
       />
       <hr />
-      <CardContent>List of the tasks</CardContent>
-      <hr />
-      <CardContent className={classes.faction}>
-        <AddCard />
+      <CardContent>
+        {/* <TaskCard /> */}
+        <div>
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} />
+          ))}
+        </div>
       </CardContent>
+      <hr />
+      <CardContent className={classes.faction}>Button</CardContent>
     </Card>
   );
 };

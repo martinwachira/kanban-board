@@ -1,6 +1,12 @@
+import { Card, CardContent } from "@mui/material";
+
 import React from "react";
 const AddCard = () => {
-  return <>Add Card</>;
+  return (
+    <Card>
+      <CardContent>List of the tasks here</CardContent>
+    </Card>
+  );
 };
 
 export default AddCard;
