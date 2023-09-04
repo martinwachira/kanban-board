@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
-import { Draggable, Droppable } from "react-beautiful-dnd";
+// import { Draggable, Droppable } from "react-beautiful-dnd";
 import React, { useState } from "react";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -7,10 +7,24 @@ import TaskCard from "./TaskCard";
 import classes from "./cardstyles.module.css";
 
 const ColumnCard = ({ title, tasks }) => {
-  const [isDragging, setIsDragging] = useState(false);
+  // const [isDragging, setIsDragging] = useState(false);
+  const [items, setTasks] = useState(tasks);
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const droppedTask = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const updatedTasks = items.filter((task) => task.id !== droppedTask.id);
+    setTasks([...updatedTasks, droppedTask]);
+  };
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
 
   return (
-    <Card className={classes.cont}>
+    <Card
+      className={classes.cont}
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+    >
       <CardHeader
         title={title}
         action={
@@ -23,34 +37,7 @@ const ColumnCard = ({ title, tasks }) => {
       <CardContent>
         <div>
           {tasks.map((task) => (
-            <Droppable
-              key={task.id}
-              droppableId={task.id.toString()}
-              isDragging={isDragging}
-              onDragEnter={() => {
-                setIsDragging(true);
-              }}
-              onDragLeave={() => {
-                setIsDragging(false);
-              }}
-              onDrop={(result) => {
-                // Do something with the result of the drop event.
-                console.log("dropped here", result);
-              }}
-            >
-              {(provided) => (
-                <Draggable
-                  draggableId={task.id.toString()}
-                  index={task.id}
-                  isDragging={isDragging}
-                  onDragStart={() => setIsDragging(true)}
-                  onDragEnd={() => setIsDragging(false)}
-                  {...provided.droppableProps}
-                >
-                  {(props) => <TaskCard task={task} />}
-                </Draggable>
-              )}
-            </Droppable>
+            <TaskCard key={task.id} task={task} />
           ))}
         </div>
       </CardContent>
