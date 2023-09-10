@@ -1,49 +1,55 @@
-import { Card, CardContent, CardHeader, IconButton } from "@mui/material";
-// import { Draggable, Droppable } from "react-beautiful-dnd";
-import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  IconButton,
+} from "@mui/material";
 
+import { Droppable } from "react-beautiful-dnd";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import React from "react";
 import TaskCard from "./TaskCard";
 import classes from "./cardstyles.module.css";
 
 const ColumnCard = ({ title, tasks }) => {
-  // const [isDragging, setIsDragging] = useState(false);
-  const [items, setTasks] = useState(tasks);
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const droppedTask = JSON.parse(e.dataTransfer.getData("text/plain"));
-    const updatedTasks = items.filter((task) => task.id !== droppedTask.id);
-    setTasks([...updatedTasks, droppedTask]);
-  };
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
   return (
-    <Card
-      className={classes.cont}
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-    >
-      <CardHeader
-        title={title}
-        action={
-          <IconButton>
-            <MoreVertIcon />
-          </IconButton>
-        }
-      />
-      <hr />
-      <CardContent>
-        <div>
-          {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
-        </div>
-      </CardContent>
-      <hr />
-      <CardContent>Button</CardContent>
-    </Card>
+    <Droppable droppableId={title}>
+      {(provided, snapshot) => (
+        <Card
+          className={classes.cont}
+          snapshot={snapshot}
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          style={{ background: "#019ebb" }}
+        >
+          <CardHeader
+            title={title}
+            action={
+              <IconButton>
+                <MoreVertIcon />
+              </IconButton>
+            }
+          />
+          <hr />
+          <CardContent>
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} index={task.id} />
+            ))}
+          </CardContent>
+          {provided.placeholder}
+          <hr />
+          <CardContent style={{ textAlign: "center", colo: "white" }}>
+            <Button
+              variant="text"
+              style={{ color: "white", fontWeight: "bold" }}
+            >
+              Add Card
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+    </Droppable>
   );
 };
 
