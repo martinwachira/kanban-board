@@ -4,20 +4,29 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   IconButton,
   Popover,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Droppable } from "react-beautiful-dnd";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TaskCard from "./TaskCard";
+import { addColumn } from "../redux/boardSlice";
 import classes from "./cardstyles.module.css";
 
 const ColumnCard = ({ column, tasks }) => {
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state.board);
+  const [showError, setShowError] = useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+
   const [anchorEl, setAnchorEl] = useState();
-  // console.log("tasks in columnCard", tasks);
-  // console.log("title", title);
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -27,8 +36,17 @@ const ColumnCard = ({ column, tasks }) => {
     setAnchorEl(null);
   };
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
   const handleAddColumn = () => {
-    console.log("Adding a column");
+    if (Object.keys(state.columns).length >= 5) {
+      setShowError(true);
+      return;
+    }
+    const columnId = `column-${Object.keys(state.columns).length + 1}`;
+    dispatch(addColumn({ columnId, title: `Column ${columnId}` }));
   };
 
   const open = Boolean(anchorEl);
@@ -65,8 +83,29 @@ const ColumnCard = ({ column, tasks }) => {
                   </Popover>
                 </IconButton>
               }
+              onClick={handleAddColumn}
             />
             <hr />
+            {showError && (
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    You can't add more columns!
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseDialog} autoFocus>
+                    Ok
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            )}
+
             <CardContent>
               {tasks.map((task, index) => {
                 return <TaskCard key={task.id} task={task} index={index} />;
@@ -75,13 +114,14 @@ const ColumnCard = ({ column, tasks }) => {
             {provided.placeholder}
             <hr />
             <CardContent style={{ textAlign: "center", colo: "white" }}>
-              <Button
-                variant="text"
-                style={{ color: "white", fontWeight: "bold" }}
-                onClick={handleAddColumn}
-              >
-                Add Card
-              </Button>
+              {Object.keys(state.columns).length < 5 && (
+                <Button
+                  variant="text"
+                  style={{ color: "white", fontWeight: "bold" }}
+                >
+                  Add Card
+                </Button>
+              )}
             </CardContent>
           </Card>
         )}

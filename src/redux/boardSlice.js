@@ -12,12 +12,12 @@ const boardSlice = createSlice({
       "column-1": {
         id: "column-1",
         title: "Todo",
-        taskIds: ["task-2", "task-3"],
+        taskIds: ["task-1", "task-3"],
       },
       "column-2": {
         id: "column-2",
         title: "In-progress",
-        taskIds: ["task-1"],
+        taskIds: ["task-2"],
       },
     },
     columnOrder: ["column-1", "column-2"],
@@ -31,10 +31,15 @@ const boardSlice = createSlice({
       newTaskIds.splice(destination.index, 0, draggableId);
       state.columns[column.id].taskIds = newTaskIds;
     },
+    addColumn: (state, action) => {
+      const { columnId, title } = action.payload;
+      state.columns[columnId] = { id: columnId, title, taskIds: [] };
+      state.columnOrder.push(columnId);
+    },
   },
 });
 
-export const { moveTask } = boardSlice.actions;
+export const { moveTask, addColumn } = boardSlice.actions;
 
 const reducer = boardSlice.reducer;
 
