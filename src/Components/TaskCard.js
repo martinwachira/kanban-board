@@ -2,21 +2,21 @@ import { Card, CardContent, TextField } from "@mui/material";
 
 import { Draggable } from "react-beautiful-dnd";
 import React from "react";
+import classes from "./cardstyles.module.css";
 
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, index }) => {
   const id = task?.id;
-  const name = task?.name;
-  // const description = task?.description;
+  const name = task?.content;
 
   return (
-    <Draggable key={id} draggableId={id.toString()} index={id}>
-      {(provided, snapshot) => (
+    <Draggable draggableId={id} index={index} key={id}>
+      {(provided) => (
         <Card
-          snapshot={snapshot}
+          className={classes.task_card}
           ref={provided.innerRef}
-          {...provided.dragHandleProps}
           {...provided.draggableProps}
-          style={{ marginBottom: "15px", background: "#aedefb" }}
+          {...provided.dragHandleProps}
+          sm={{ margin: 1 }}
         >
           <CardContent>
             <TextField value={name} fullWidth />

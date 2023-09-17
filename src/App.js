@@ -5,9 +5,16 @@ import React from "react";
 
 function App() {
   return (
-    <div className="App">
-      <Board />
-    </div>
+    <>
+      <div style={{ margin: "2rem 4rem" }}>
+        <h2>Kanban</h2>
+        <strong>Dashboard</strong> {">"} Kanban
+        <br />
+      </div>
+      <div className="App">
+        <Board />
+      </div>
+    </>
   );
 }
 

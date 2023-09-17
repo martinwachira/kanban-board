@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-globals */
-/* global self */
 
 // Define a name and version for your cache
 const CACHE_NAME = "kanban-app-v1";
@@ -7,10 +6,10 @@ const CACHE_NAME = "kanban-app-v1";
 // Define the assets to cache
 const ASSETS_TO_CACHE = [
   "/",
-  "/index.html",
-  "/index.js",
-  "/index.css",
-  "/manifest.json",
+  "./index.html",
+  "../src/index.js",
+  "../src/App.css",
+  "./manifest.json",
   // Add any other assets that you want to cache
 ];
 
