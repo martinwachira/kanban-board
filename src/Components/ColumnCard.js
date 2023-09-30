@@ -9,16 +9,22 @@ import {
   DialogContent,
   DialogContentText,
   IconButton,
+  Paper,
   Popover,
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
+import {
+  addColumn,
+  clearColumn,
+  deleteColumn,
+  renameColumn,
+} from "../redux/boardSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Droppable } from "react-beautiful-dnd";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import TaskCard from "./TaskCard";
-import { addColumn } from "../redux/boardSlice";
 import classes from "./cardstyles.module.css";
 
 const ColumnCard = ({ column, tasks }) => {
@@ -42,7 +48,20 @@ const ColumnCard = ({ column, tasks }) => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+  const handleRename = () => {
+    dispatch(renameColumn({ columnId: column.id, newTitle: title }));
+    handleClose();
+  };
 
+  const handleDelete = () => {
+    dispatch(deleteColumn(column.id));
+    handleClose();
+  };
+
+  const handleClear = () => {
+    dispatch(clearColumn(column.id));
+    handleClose();
+  };
   // this func adds new column cards limited to 5 cards and assigns newly created cards new ids
   const handleAddColumn = (e) => {
     e.preventDefault();
@@ -85,9 +104,11 @@ const ColumnCard = ({ column, tasks }) => {
                       horizontal: "left",
                     }}
                   >
-                    <p>Rename</p>
-                    <p>Delete</p>
-                    <p>Clear</p>
+                    <Paper style={{ padding: "1.5rem" }}>
+                      <p onClick={handleRename}>Rename</p>
+                      <p onClick={handleDelete}>Delete</p>
+                      <p onClick={handleClear}>Clear</p>
+                    </Paper>
                   </Popover>
                 </IconButton>
               }

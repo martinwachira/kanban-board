@@ -31,10 +31,24 @@ const boardSlice = createSlice({
       state.columns[columnId] = { id: columnId, title, taskIds: [] };
       state.columnOrder.push(columnId);
     },
+    renameColumn: (state, action) => {
+      const { columnId, newTitle } = action.payload;
+      state.columns[columnId].title = newTitle;
+    },
+    deleteColumn: (state, action) => {
+      const columnId = action.payload;
+      delete state.columns[columnId];
+      state.columnOrder = state.columnOrder.filter((id) => id !== columnId);
+    },
+    clearColumn: (state, action) => {
+      const columnId = action.payload;
+      state.columns[columnId].taskIds = [];
+    },
   },
 });
 
-export const { moveTask, addColumn } = boardSlice.actions;
+export const { moveTask, addColumn, renameColumn, deleteColumn, clearColumn } =
+  boardSlice.actions;
 
 const reducer = boardSlice.reducer;
 
