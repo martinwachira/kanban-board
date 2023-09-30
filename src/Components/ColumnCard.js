@@ -10,6 +10,7 @@ import {
   DialogContentText,
   IconButton,
   Popover,
+  TextField,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,30 +24,37 @@ import classes from "./cardstyles.module.css";
 const ColumnCard = ({ column, tasks }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.board);
+  const [title, setTitle] = useState(column.title);
   const [showError, setShowError] = useState(false);
-  const [openDialog, setOpenDialog] = React.useState(false);
-
+  const [openDialog, setOpenDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState();
 
+  // func to update the title names
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
 
-  const handleAddColumn = () => {
+  // this func adds new column cards limited to 5 cards and assigns newly created cards new ids
+  const handleAddColumn = (e) => {
+    e.preventDefault();
     if (Object.keys(state.columns).length >= 5) {
       setShowError(true);
+      setOpenDialog(true);
       return;
     }
-    const columnId = `column-${Object.keys(state.columns).length + 1}`;
-    dispatch(addColumn({ columnId, title: `Column ${columnId}` }));
+    // Generate a new unique id
+    const newColumnId = `column-${Object.keys(state.columns).length + 1}`;
+    dispatch(addColumn({ columnId: newColumnId, title: title }));
+    console.log("columns", state.columns);
   };
 
   const open = Boolean(anchorEl);
@@ -63,7 +71,7 @@ const ColumnCard = ({ column, tasks }) => {
             style={{ background: "#019ebb" }}
           >
             <CardHeader
-              title={column.title}
+              title={<TextField value={title} onChange={handleTitleChange} />}
               action={
                 <IconButton onClick={handleClick}>
                   <MoreVertIcon />
@@ -83,7 +91,6 @@ const ColumnCard = ({ column, tasks }) => {
                   </Popover>
                 </IconButton>
               }
-              onClick={handleAddColumn}
             />
             <hr />
             {showError && (
@@ -114,14 +121,14 @@ const ColumnCard = ({ column, tasks }) => {
             {provided.placeholder}
             <hr />
             <CardContent style={{ textAlign: "center", colo: "white" }}>
-              {Object.keys(state.columns).length < 5 && (
-                <Button
-                  variant="text"
-                  style={{ color: "white", fontWeight: "bold" }}
-                >
-                  Add Card
-                </Button>
-              )}
+              <Button
+                onClick={handleAddColumn}
+                disabled={Object.keys(state.columns).length > 5}
+                variant="text"
+                style={{ color: "white", fontWeight: "bold" }}
+              >
+                Add Card
+              </Button>
             </CardContent>
           </Card>
         )}

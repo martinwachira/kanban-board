@@ -14,13 +14,8 @@ const boardSlice = createSlice({
         title: "Todo",
         taskIds: ["task-1", "task-3"],
       },
-      "column-2": {
-        id: "column-2",
-        title: "In-progress",
-        taskIds: ["task-2"],
-      },
     },
-    columnOrder: ["column-1", "column-2"],
+    columnOrder: ["column-1"],
   },
   reducers: {
     moveTask: (state, action) => {
