@@ -1,6 +1,8 @@
 .cont {
   display: inline-block;
-  margin: 2.5rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
+
   /* width: 200;
   margin: 10; */
 }
@@ -10,4 +12,8 @@
 
 .task_card {
   margin-bottom: 1rem;
+}
+
+.btn {
+  background-color: black;
 }

@@ -4,22 +4,13 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
   IconButton,
   Paper,
   Popover,
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
-import {
-  addColumn,
-  clearColumn,
-  deleteColumn,
-  renameColumn,
-} from "../redux/boardSlice";
+import { clearColumn, deleteColumn, renameColumn } from "../redux/boardSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Droppable } from "react-beautiful-dnd";
@@ -31,11 +22,9 @@ const ColumnCard = ({ column, tasks }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.board);
   const [title, setTitle] = useState(column.title);
-  const [showError, setShowError] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState();
 
-  // func to update the title names
+  // func to update the column title name
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -44,9 +33,6 @@ const ColumnCard = ({ column, tasks }) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
   };
   const handleRename = () => {
     dispatch(renameColumn({ columnId: column.id, newTitle: title }));
@@ -61,19 +47,6 @@ const ColumnCard = ({ column, tasks }) => {
   const handleClear = () => {
     dispatch(clearColumn(column.id));
     handleClose();
-  };
-  // this func adds new column cards limited to 5 cards and assigns newly created cards new ids
-  const handleAddColumn = (e) => {
-    e.preventDefault();
-    if (Object.keys(state.columns).length >= 5) {
-      setShowError(true);
-      setOpenDialog(true);
-      return;
-    }
-    // Generate a new unique id
-    const newColumnId = `column-${Object.keys(state.columns).length + 1}`;
-    dispatch(addColumn({ columnId: newColumnId, title: title }));
-    console.log("columns", state.columns);
   };
 
   const open = Boolean(anchorEl);
@@ -114,25 +87,6 @@ const ColumnCard = ({ column, tasks }) => {
               }
             />
             <hr />
-            {showError && (
-              <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-              >
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    You can't add more columns!
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseDialog} autoFocus>
-                    Ok
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            )}
 
             <CardContent>
               {tasks.map((task, index) => {
@@ -143,7 +97,6 @@ const ColumnCard = ({ column, tasks }) => {
             <hr />
             <CardContent style={{ textAlign: "center", colo: "white" }}>
               <Button
-                onClick={handleAddColumn}
                 disabled={Object.keys(state.columns).length > 5}
                 variant="text"
                 style={{ color: "white", fontWeight: "bold" }}
