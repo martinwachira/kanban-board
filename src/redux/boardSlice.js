@@ -26,6 +26,11 @@ const boardSlice = createSlice({
       newTaskIds.splice(destination.index, 0, draggableId);
       state.columns[column.id].taskIds = newTaskIds;
     },
+    addTask: (state, action) => {
+      const { taskId, content, columnId } = action.payload;
+      state.tasks[taskId] = { id: taskId, content: content };
+      state.columns[columnId].taskIds.push(taskId);
+    },
     addColumn: (state, action) => {
       const { columnId, title } = action.payload;
       state.columns[columnId] = { id: columnId, title, taskIds: [] };
@@ -47,8 +52,14 @@ const boardSlice = createSlice({
   },
 });
 
-export const { moveTask, addColumn, renameColumn, deleteColumn, clearColumn } =
-  boardSlice.actions;
+export const {
+  addTask,
+  moveTask,
+  addColumn,
+  renameColumn,
+  deleteColumn,
+  clearColumn,
+} = boardSlice.actions;
 
 const reducer = boardSlice.reducer;
 

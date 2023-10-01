@@ -10,7 +10,12 @@ import {
   TextField,
 } from "@mui/material";
 import React, { useState } from "react";
-import { clearColumn, deleteColumn, renameColumn } from "../redux/boardSlice";
+import {
+  addTask,
+  clearColumn,
+  deleteColumn,
+  renameColumn,
+} from "../redux/boardSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Droppable } from "react-beautiful-dnd";
@@ -28,6 +33,19 @@ const ColumnCard = ({ column, tasks }) => {
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
+  const handleAddTask = (content, columnId) => {
+    // Generate a unique taskId based on the current number of tasks
+    const taskId = `task-${Object.keys(state.tasks).length + 1}`;
+    console.log("tasks", taskId, "column", column.id);
+    dispatch(
+      addTask({
+        taskId: taskId,
+        content: content,
+        columnId: column.id,
+      })
+    );
+  };
+
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -43,7 +61,6 @@ const ColumnCard = ({ column, tasks }) => {
     dispatch(deleteColumn(column.id));
     handleClose();
   };
-
   const handleClear = () => {
     dispatch(clearColumn(column.id));
     handleClose();
@@ -97,6 +114,7 @@ const ColumnCard = ({ column, tasks }) => {
             <hr />
             <CardContent style={{ textAlign: "center", colo: "white" }}>
               <Button
+                onClick={handleAddTask}
                 disabled={Object.keys(state.columns).length > 5}
                 variant="text"
                 style={{ color: "white", fontWeight: "bold" }}
