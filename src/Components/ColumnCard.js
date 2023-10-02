@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import {
-  addTask,
+  addTaskCard,
   clearColumn,
   deleteColumn,
   renameColumn,
@@ -33,14 +33,14 @@ const ColumnCard = ({ column, tasks }) => {
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
-  const handleAddTask = (content, columnId) => {
+  const handleAddTaskCard = () => {
     // Generate a unique taskId based on the current number of tasks
     const taskId = `task-${Object.keys(state.tasks).length + 1}`;
     console.log("tasks", taskId, "column", column.id);
     dispatch(
-      addTask({
+      addTaskCard({
         taskId: taskId,
-        content: content,
+        content: "",
         columnId: column.id,
       })
     );
@@ -114,7 +114,7 @@ const ColumnCard = ({ column, tasks }) => {
             <hr />
             <CardContent style={{ textAlign: "center", colo: "white" }}>
               <Button
-                onClick={handleAddTask}
+                onClick={handleAddTaskCard}
                 disabled={Object.keys(state.columns).length > 5}
                 variant="text"
                 style={{ color: "white", fontWeight: "bold" }}
