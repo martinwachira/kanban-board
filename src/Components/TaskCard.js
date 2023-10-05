@@ -1,9 +1,9 @@
 import { Button, Card, CardContent, TextField } from "@mui/material";
 import React, { useState } from "react";
+import { addTask, updateTaskContent } from "../redux/boardSlice";
 
 import { Draggable } from "react-beautiful-dnd";
 import classes from "./cardstyles.module.css";
-import { updateTaskContent } from "../redux/boardSlice";
 import { useDispatch } from "react-redux";
 
 const TaskCard = ({ task, index }) => {
@@ -11,6 +11,11 @@ const TaskCard = ({ task, index }) => {
   const id = task?.id;
   const name = task?.content;
   const [taskName, setTaskName] = useState(name);
+
+  const handleAddTask = () => {
+    console.log("adding a task");
+    dispatch(addTask);
+  };
 
   return (
     <Draggable draggableId={id} index={index} key={id}>
@@ -36,8 +41,14 @@ const TaskCard = ({ task, index }) => {
             />
             <br />
             <br />
-            <Button variant="standard">Cancel</Button>
-            <Button variant="contained" style={{ float: "right" }}>
+            <Button variant="standard" style={{ fontSize: ".5rem" }}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              style={{ float: "right", fontSize: ".5rem" }}
+              onClick={handleAddTask}
+            >
               Add
             </Button>
           </CardContent>

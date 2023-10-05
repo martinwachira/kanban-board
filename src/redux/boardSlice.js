@@ -17,7 +17,14 @@ const boardSlice = createSlice({
     },
     columnOrder: ["column-1"],
   },
+
   reducers: {
+    addTask: (state, action) => {
+      const { taskId, content } = action.payload;
+      state.tasks[taskId] = { id: taskId, content: content };
+      // state.columns[columnId].taskIds.push(taskId);
+    },
+
     moveTask: (state, action) => {
       const { source, destination, draggableId } = action.payload;
       const column = state.columns[source.droppableId];
@@ -26,29 +33,35 @@ const boardSlice = createSlice({
       newTaskIds.splice(destination.index, 0, draggableId);
       state.columns[column.id].taskIds = newTaskIds;
     },
+
     addTaskCard: (state, action) => {
       const { taskId, content, columnId } = action.payload;
       state.tasks[taskId] = { id: taskId, content: content };
       state.columns[columnId].taskIds.push(taskId);
     },
+
     updateTaskContent: (state, action) => {
       const { taskId, newContent } = action.payload;
       state.tasks[taskId].content = newContent;
     },
+
     addColumn: (state, action) => {
       const { columnId, title } = action.payload;
       state.columns[columnId] = { id: columnId, title, taskIds: [] };
       state.columnOrder.push(columnId);
     },
+
     renameColumn: (state, action) => {
       const { columnId, newTitle } = action.payload;
       state.columns[columnId].title = newTitle;
     },
+
     deleteColumn: (state, action) => {
       const columnId = action.payload;
       delete state.columns[columnId];
       state.columnOrder = state.columnOrder.filter((id) => id !== columnId);
     },
+
     clearColumn: (state, action) => {
       const columnId = action.payload;
       state.columns[columnId].taskIds = [];
@@ -59,6 +72,7 @@ const boardSlice = createSlice({
 export const {
   addTaskCard,
   updateTaskContent,
+  addTask,
   moveTask,
   addColumn,
   renameColumn,
