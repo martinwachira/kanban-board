@@ -8,7 +8,8 @@ import { useDispatch } from "react-redux";
 
 const TaskCard = ({ task, index }) => {
   const dispatch = useDispatch();
-  const [isTaskAdded, setIsTaskAdded] = useState(false);
+  // const [isTaskAdded, setIsTaskAdded] = useState(false);
+  const [isTaskAdded, setIsTaskAdded] = useState(!!task.content);
 
   const id = task?.id;
   const name = task?.content;
@@ -19,6 +20,7 @@ const TaskCard = ({ task, index }) => {
     const newTaskId = "task-" + Date.now(); //generate a unique id for the task
     dispatch(addTask({ taskId: newTaskId, content: taskName }));
     setIsTaskAdded(true);
+    console.log("is added?", isTaskAdded);
   };
 
   const handleDeleteTask = () => {

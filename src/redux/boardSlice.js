@@ -20,15 +20,6 @@ const boardSlice = createSlice({
       state.tasks[taskId] = { id: taskId, content: content };
     },
 
-    // moveTask: (state, action) => {
-    //   const { source, destination, draggableId } = action.payload;
-    //   const column = state.columns[source.droppableId];
-    //   const newTaskIds = Array.from(column.taskIds);
-    //   newTaskIds.splice(source.index, 1);
-    //   newTaskIds.splice(destination.index, 0, draggableId);
-    //   state.columns[column.id].taskIds = newTaskIds;
-    // },
-
     moveTask: (state, action) => {
       const { source, destination, draggableId } = action.payload;
 
