@@ -18,17 +18,31 @@ const boardSlice = createSlice({
     addTask: (state, action) => {
       const { taskId, content } = action.payload;
       state.tasks[taskId] = { id: taskId, content: content };
-      // add the new task id to the first column's taskIds arr
-      state.columns["column-1"].taskIds.push(taskId);
     },
+
+    // moveTask: (state, action) => {
+    //   const { source, destination, draggableId } = action.payload;
+    //   const column = state.columns[source.droppableId];
+    //   const newTaskIds = Array.from(column.taskIds);
+    //   newTaskIds.splice(source.index, 1);
+    //   newTaskIds.splice(destination.index, 0, draggableId);
+    //   state.columns[column.id].taskIds = newTaskIds;
+    // },
 
     moveTask: (state, action) => {
       const { source, destination, draggableId } = action.payload;
-      const column = state.columns[source.droppableId];
-      const newTaskIds = Array.from(column.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
-      state.columns[column.id].taskIds = newTaskIds;
+
+      // Remove task from source column
+      const start = state.columns[source.droppableId];
+      const newStartTaskIds = Array.from(start.taskIds);
+      newStartTaskIds.splice(source.index, 1);
+      start.taskIds = newStartTaskIds;
+
+      // Add task to destination column
+      const finish = state.columns[destination.droppableId];
+      const newFinishTaskIds = Array.from(finish.taskIds);
+      newFinishTaskIds.splice(destination.index, 0, draggableId);
+      finish.taskIds = newFinishTaskIds;
     },
 
     deleteTask: (state, action) => {

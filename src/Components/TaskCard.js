@@ -42,7 +42,7 @@ const TaskCard = ({ task, index }) => {
             ) : (
               <TextField
                 // label="Task"
-                // value={taskName}
+                value={taskName}
                 onChange={(e) => {
                   setTaskName(e.target.value);
                   dispatch(

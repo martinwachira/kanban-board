@@ -36,6 +36,7 @@ const ColumnCard = ({ column, tasks }) => {
   const handleAddTaskCard = () => {
     // Generate a unique taskId based on the current number of tasks
     const taskId = `task-${Object.keys(state.tasks).length + 1}`;
+    // const taskId = "task-" + Date.now();
     console.log("tasks", taskId, "column", column.id);
     dispatch(
       addTaskCard({
