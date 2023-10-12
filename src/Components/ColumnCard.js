@@ -107,7 +107,9 @@ const ColumnCard = ({ column, tasks }) => {
 
             <CardContent>
               {tasks.map((task, index) => {
-                return <TaskCard key={task.id} task={task} index={index} />;
+                if (task) {
+                  return <TaskCard key={task.id} task={task} index={index} />;
+                }
               })}
             </CardContent>
             {provided.placeholder}

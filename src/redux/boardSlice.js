@@ -3,16 +3,12 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 const boardSlice = createSlice({
   name: "board",
   initialState: {
-    tasks: {
-      "task-1": { id: "task-1", content: "Task 1" },
-      "task-2": { id: "task-2", content: "Task 2" },
-      "task-3": { id: "task-3", content: "Task 3" },
-    },
+    tasks: {},
     columns: {
       "column-1": {
         id: "column-1",
         title: "Todo",
-        taskIds: ["task-1", "task-3"],
+        taskIds: [],
       },
     },
     columnOrder: ["column-1"],
@@ -22,7 +18,8 @@ const boardSlice = createSlice({
     addTask: (state, action) => {
       const { taskId, content } = action.payload;
       state.tasks[taskId] = { id: taskId, content: content };
-      // state.columns[columnId].taskIds.push(taskId);
+      // add the new task id to the first column's taskIds arr
+      state.columns["column-1"].taskIds.push(taskId);
     },
 
     moveTask: (state, action) => {
@@ -32,6 +29,12 @@ const boardSlice = createSlice({
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
       state.columns[column.id].taskIds = newTaskIds;
+    },
+
+    deleteTask: (state, action) => {
+      const taskId = action.payload;
+      const { [taskId]: deletedTask, ...remainingTasks } = state.tasks;
+      state.tasks = remainingTasks;
     },
 
     addTaskCard: (state, action) => {
@@ -74,6 +77,7 @@ export const {
   updateTaskContent,
   addTask,
   moveTask,
+  deleteTask,
   addColumn,
   renameColumn,
   deleteColumn,
