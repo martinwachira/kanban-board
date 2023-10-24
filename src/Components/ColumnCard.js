@@ -27,7 +27,7 @@ const ColumnCard = ({ column, tasks }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.board);
   const [title, setTitle] = useState(column.title);
-  const [anchorEl, setAnchorEl] = useState();
+  const [anchorEl, setAnchorEl] = useState(null);
 
   // func to update the column title name
   const handleTitleChange = (e) => {
@@ -47,24 +47,22 @@ const ColumnCard = ({ column, tasks }) => {
     );
   };
 
-  const handleClick = (e) => {
+  const handleOpenAnchor = (e) => {
     setAnchorEl(e.currentTarget);
+    console.log("clicked icons");
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
   const handleRename = () => {
     dispatch(renameColumn({ columnId: column.id, newTitle: title }));
-    handleClose();
   };
 
   const handleDelete = () => {
     dispatch(deleteColumn(column.id));
-    handleClose();
   };
   const handleClear = () => {
     dispatch(clearColumn(column.id));
-    handleClose();
   };
 
   const open = Boolean(anchorEl);
@@ -80,10 +78,10 @@ const ColumnCard = ({ column, tasks }) => {
             {...provided.droppableProps}
             style={{ background: "#019ebb" }}
           >
-            <CardHeader
+            {/* <CardHeader
               title={<TextField value={title} onChange={handleTitleChange} />}
               action={
-                <IconButton onClick={handleClick}>
+                <IconButton aria-describedby={id} onClick={handleOpenAnchor}>
                   <MoreVertIcon />
                   <Popover
                     id={id}
@@ -103,6 +101,33 @@ const ColumnCard = ({ column, tasks }) => {
                   </Popover>
                 </IconButton>
               }
+            /> */}
+
+            <CardHeader
+              action={
+                <div>
+                  <IconButton aria-label="settings" onClick={handleOpenAnchor}>
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "left",
+                    }}
+                  >
+                    <Paper style={{ padding: "1.5rem" }}>
+                      <p onClick={handleRename}>Rename</p>
+                      <p onClick={handleDelete}>Delete</p>
+                      <p onClick={handleClear}>Clear</p>
+                    </Paper>
+                  </Popover>
+                </div>
+              }
+              title={<TextField value={title} onChange={handleTitleChange} />}
             />
             <hr />
 

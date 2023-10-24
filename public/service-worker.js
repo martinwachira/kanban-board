@@ -39,13 +39,29 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return (
-        cachedResponse ||
-        fetch(event.request).then((networkResponse) => {
-          // Optionally, you can add some logic here to update the cache with the network response
-          return networkResponse;
-        })
-      );
+      if (cachedResponse) {
+        // If there's a cached response, return it
+        return cachedResponse;
+      }
+
+      // If there's no cached response, fetch from the network and update the cache
+      return fetch(event.request).then((networkResponse) => {
+        // Make sure the response is OK before updating the cache
+        if (
+          networkResponse &&
+          networkResponse.status === 200 &&
+          networkResponse.type === "basic"
+        ) {
+          // Clone the response because it's a stream and can only be consumed once
+          var responseToCache = networkResponse.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+
+        return networkResponse;
+      });
     })
   );
 });

@@ -72,7 +72,18 @@ const boardSlice = createSlice({
 
     clearColumn: (state, action) => {
       const columnId = action.payload;
-      state.columns[columnId].taskIds = [];
+      console.log("Clearing column: ", columnId);
+
+      // If the column exists, clear its name
+      if (state.columns[columnId]) {
+        state.columns = {
+          ...state.columns,
+          [columnId]: {
+            ...state.columns[columnId],
+            title: "",
+          },
+        };
+      }
     },
   },
 });
