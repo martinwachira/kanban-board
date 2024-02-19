@@ -16,7 +16,6 @@ const TaskCard = ({ task, index }) => {
   const [taskName, setTaskName] = useState(name);
 
   const handleAddTask = () => {
-    console.log("adding a task");
     const newTaskId = "task-" + Date.now(); //generate a unique id for the task
     dispatch(addTask({ taskId: newTaskId, content: taskName }));
     setIsTaskAdded(true);

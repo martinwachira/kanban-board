@@ -10,7 +10,6 @@ const ASSETS_TO_CACHE = [
   "../src/index.js",
   "../src/App.css",
   "./manifest.json",
-  // Add any other assets that you want to cache
 ];
 
 // Install the service worker and cache the assets
